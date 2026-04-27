@@ -99,17 +99,7 @@ class LowPassFilters(torch.nn.Module):
         self.register_buffer("filters", torch.stack(filters)[:, None])
 
     def forward(self, input):
-        shape = list(input.shape)
-        input = input.view(-1, 1, shape[-1])
-        if self.pad:
-            input = F.pad(input, (self.half_size, self.half_size), mode='replicate')
-        if self.fft:
-            out = fft_conv1d(input, self.filters, stride=self.stride)
-        else:
-            out = F.conv1d(input, self.filters, stride=self.stride)
-        shape.insert(0, len(self.cutoffs))
-        shape[-1] = out.shape[-1]
-        return out.permute(1, 0, 2).reshape(shape)
+        pass
 
     def __repr__(self):
         return simple_repr(self)
@@ -137,26 +127,26 @@ class LowPassFilter(torch.nn.Module):
 
     @property
     def cutoff(self):
-        return self._lowpasses.cutoffs[0]
+        pass
 
     @property
     def stride(self):
-        return self._lowpasses.stride
+        pass
 
     @property
     def pad(self):
-        return self._lowpasses.pad
+        pass
 
     @property
     def zeros(self):
-        return self._lowpasses.zeros
+        pass
 
     @property
     def fft(self):
-        return self._lowpasses.fft
+        pass
 
     def forward(self, input):
-        return self._lowpasses(input)[0]
+        pass
 
     def __repr__(self):
         return simple_repr(self)
@@ -168,7 +158,7 @@ def lowpass_filters(input: torch.Tensor,  cutoffs: Sequence[float],
     """
     Functional version of `LowPassFilters`, refer to this class for more information.
     """
-    return LowPassFilters(cutoffs, stride, pad, zeros, fft).to(input)(input)
+    pass
 
 
 def lowpass_filter(input: torch.Tensor,  cutoff: float,
@@ -178,4 +168,4 @@ def lowpass_filter(input: torch.Tensor,  cutoff: float,
     Same as `lowpass_filters` but with a single cutoff frequency.
     Output will not have a dimension inserted in the front.
     """
-    return lowpass_filters(input, [cutoff], stride, pad, zeros, fft)[0]
+    pass

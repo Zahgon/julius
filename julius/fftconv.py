@@ -23,22 +23,19 @@ from .utils import simple_repr
 
 # This is quite verbose, but sadly needed to make TorchScript happy.
 def _new_rfft(x: torch.Tensor):
-    z = new_fft.rfft(x, dim=-1)
-    return torch.view_as_real(z)
+    pass
 
 
 def _old_rfft(x: torch.Tensor):
-    return torch.rfft(x, 1)  # type: ignore
+    pass
 
 
 def _old_irfft(x: torch.Tensor, length: int):
-    result = torch.irfft(x, 1, signal_sizes=(length,))  # type: ignore
-    return result
+    pass
 
 
 def _new_irfft(x: torch.Tensor, length: int):
-    x = torch.view_as_complex(x)
-    return new_fft.irfft(x, length, dim=-1)
+    pass
 
 
 if new_fft is None:
@@ -57,15 +54,7 @@ def _compl_mul_conjugate(a: torch.Tensor, b: torch.Tensor):
     being with respect to the second dimension.
 
     """
-    # PyTorch 1.7 supports complex number, but not for all operations.
-    # Once the support is widespread, this can likely go away.
-
-    op = "bcft,dct->bdft"
-    return torch.stack([
-        torch.einsum(op, a[..., 0], b[..., 0]) + torch.einsum(op, a[..., 1], b[..., 1]),
-        torch.einsum(op, a[..., 1], b[..., 0]) - torch.einsum(op, a[..., 0], b[..., 1])
-    ],
-                       dim=-1)
+    pass
 
 
 def fft_conv1d(
@@ -101,38 +90,7 @@ def fft_conv1d(
         Dilation and groups are not supported at the moment. This function might use
         more memory than the default Conv1d implementation.
     """
-    input = F.pad(input, (padding, padding))
-    batch, channels, length = input.shape
-    out_channels, _, kernel_size = weight.shape
-
-    if length < kernel_size:
-        raise RuntimeError(f"Input should be at least as large as the kernel size {kernel_size}, "
-                           f"but it is only {length} samples long.")
-    if block_ratio < 1:
-        raise RuntimeError("Block ratio must be greater than 1.")
-
-    # We are going to process the input blocks by blocks, as for some reason it is faster
-    # and less memory intensive (I think the culprit is `torch.einsum`.
-    block_size: int = min(int(kernel_size * block_ratio), length)
-    fold_stride = block_size - kernel_size + 1
-    weight = pad_to(weight, block_size)
-    weight_z = _rfft(weight)
-
-    # We pad the input and get the different frames, on which
-    frames = unfold(input, block_size, fold_stride)
-
-    frames_z = _rfft(frames)
-    out_z = _compl_mul_conjugate(frames_z, weight_z)
-    out = _irfft(out_z, block_size)
-    # The last bit is invalid, because FFT will do a circular convolution.
-    out = out[..., :-kernel_size + 1]
-    out = out.reshape(batch, out_channels, -1)
-    out = out[..., ::stride]
-    target_length = (length - kernel_size) // stride + 1
-    out = out[..., :target_length]
-    if bias is not None:
-        out += bias[:, None]
-    return out
+    pass
 
 
 class FFTConv1d(torch.nn.Module):
@@ -176,8 +134,7 @@ class FFTConv1d(torch.nn.Module):
         self.bias = conv.bias
 
     def forward(self, input: torch.Tensor):
-        return fft_conv1d(
-            input, self.weight, self.bias, self.stride, self.padding)
+        pass
 
     def __repr__(self):
         return simple_repr(self, overrides={"bias": self.bias is not None})

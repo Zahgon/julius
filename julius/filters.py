@@ -64,37 +64,26 @@ class HighPassFilters(torch.nn.Module):
 
     @property
     def cutoffs(self):
-        return self._lowpasses.cutoffs
+        pass
 
     @property
     def stride(self):
-        return self._lowpasses.stride
+        pass
 
     @property
     def pad(self):
-        return self._lowpasses.pad
+        pass
 
     @property
     def zeros(self):
-        return self._lowpasses.zeros
+        pass
 
     @property
     def fft(self):
-        return self._lowpasses.fft
+        pass
 
     def forward(self, input):
-        lows = self._lowpasses(input)
-
-        # We need to extract the right portion of the input in case
-        # pad is False or stride > 1
-        if self.pad:
-            start, end = 0, input.shape[-1]
-        else:
-            start = self._lowpasses.half_size
-            end = -start
-        input = input[..., start:end:self.stride]
-        highs = input - lows
-        return highs
+        pass
 
     def __repr__(self):
         return simple_repr(self)
@@ -122,26 +111,26 @@ class HighPassFilter(torch.nn.Module):
 
     @property
     def cutoff(self):
-        return self._highpasses.cutoffs[0]
+        pass
 
     @property
     def stride(self):
-        return self._highpasses.stride
+        pass
 
     @property
     def pad(self):
-        return self._highpasses.pad
+        pass
 
     @property
     def zeros(self):
-        return self._highpasses.zeros
+        pass
 
     @property
     def fft(self):
-        return self._highpasses.fft
+        pass
 
     def forward(self, input):
-        return self._highpasses(input)[0]
+        pass
 
     def __repr__(self):
         return simple_repr(self)
@@ -153,7 +142,7 @@ def highpass_filters(input: torch.Tensor,  cutoffs: Sequence[float],
     """
     Functional version of `HighPassFilters`, refer to this class for more information.
     """
-    return HighPassFilters(cutoffs, stride, pad, zeros, fft).to(input)(input)
+    pass
 
 
 def highpass_filter(input: torch.Tensor,  cutoff: float,
@@ -163,7 +152,7 @@ def highpass_filter(input: torch.Tensor,  cutoff: float,
     Functional version of `HighPassFilter`, refer to this class for more information.
     Output will not have a dimension inserted in the front.
     """
-    return highpass_filters(input, [cutoff], stride, pad, zeros, fft)[0]
+    pass
 
 
 class BandPassFilter(torch.nn.Module):
@@ -218,31 +207,30 @@ class BandPassFilter(torch.nn.Module):
 
     @property
     def cutoff_low(self):
-        return self._lowpasses.cutoffs[0]
+        pass
 
     @property
     def cutoff_high(self):
-        return self._lowpasses.cutoffs[1]
+        pass
 
     @property
     def stride(self):
-        return self._lowpasses.stride
+        pass
 
     @property
     def pad(self):
-        return self._lowpasses.pad
+        pass
 
     @property
     def zeros(self):
-        return self._lowpasses.zeros
+        pass
 
     @property
     def fft(self):
-        return self._lowpasses.fft
+        pass
 
     def forward(self, input):
-        lows = self._lowpasses(input)
-        return lows[1] - lows[0]
+        pass
 
     def __repr__(self):
         return simple_repr(self)
@@ -255,4 +243,4 @@ def bandpass_filter(input: torch.Tensor,  cutoff_low: float, cutoff_high: float,
     Functional version of `BandPassfilter`, refer to this class for more information.
     Output will not have a dimension inserted in the front.
     """
-    return BandPassFilter(cutoff_low, cutoff_high, stride, pad, zeros, fft).to(input)(input)
+    pass

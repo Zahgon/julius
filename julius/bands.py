@@ -79,28 +79,11 @@ class SplitBands(torch.nn.Module):
             self.lowpass = None  # type: ignore
 
     def forward(self, input):
-        if self.lowpass is None:
-            return input[None]
-        lows = self.lowpass(input)
-        low = lows[0]
-        bands = [low]
-        for low_and_band in lows[1:]:
-            # Get a bandpass filter by substracting lowpasses
-            band = low_and_band - low
-            bands.append(band)
-            low = low_and_band
-        # Last band is whatever is left in the signal
-        bands.append(input - low)
-        return torch.stack(bands)
+        pass
 
     @property
     def cutoffs(self):
-        if self._cutoffs is not None:
-            return self._cutoffs
-        elif self.lowpass is not None:
-            return [c * self.sample_rate for c in self.lowpass.cutoffs]
-        else:
-            return []
+        pass
 
     def __repr__(self):
         return simple_repr(self, overrides={"cutoffs": self._cutoffs})
@@ -116,4 +99,4 @@ def split_bands(signal: torch.Tensor, sample_rate: float, n_bands: Optional[int]
     >>> list(split_bands(x, sample_rate=64, cutoffs=[12, 24]).shape)
     [3, 6, 4, 1024]
     """
-    return SplitBands(sample_rate, n_bands, cutoffs, pad, zeros, fft).to(signal)(signal)
+    pass

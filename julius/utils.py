@@ -16,28 +16,7 @@ def simple_repr(obj, attrs: tp.Optional[tp.Sequence[str]] = None,
     Return a simple representation string for `obj`.
     If `attrs` is not None, it should be a list of attributes to include.
     """
-    params = inspect.signature(obj.__class__).parameters
-    attrs_repr = []
-    if attrs is None:
-        attrs = list(params.keys())
-    for attr in attrs:
-        display = False
-        if attr in overrides:
-            value = overrides[attr]
-        elif hasattr(obj, attr):
-            value = getattr(obj, attr)
-        else:
-            continue
-        if attr in params:
-            param = params[attr]
-            if param.default is inspect._empty or value != param.default:  # type: ignore
-                display = True
-        else:
-            display = True
-
-        if display:
-            attrs_repr.append(f"{attr}={value}")
-    return f"{obj.__class__.__name__}({','.join(attrs_repr)})"
+    pass
 
 
 class MarkdownTable:
@@ -60,18 +39,13 @@ class MarkdownTable:
         self.file = file
 
     def _writeln(self, line):
-        self.file.write("|" + "|".join(line) + "|\n")
+        pass
 
     def header(self):
-        self._writeln(f" {col} " for col in self.columns)
-        self._writeln("-" * (len(col) + 2) for col in self.columns)
+        pass
 
     def line(self, line):
-        out = []
-        for val, col in zip(line, self.columns):
-            val = format(val, '>' + str(len(col)))
-            out.append(" " + val + " ")
-        self._writeln(out)
+        pass
 
 
 class Chrono:

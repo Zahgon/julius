@@ -16,14 +16,14 @@ def sinc(x: torch.Tensor):
 
     __Warning__: the input is not multiplied by `pi`!
     """
-    return torch.where(x == 0, torch.tensor(1., device=x.device, dtype=x.dtype), torch.sin(x) / x)
+    pass
 
 
 def pad_to(tensor: torch.Tensor, target_length: int, mode: str = 'constant', value: float = 0):
     """
     Pad the given tensor to the given length, with 0s on the right.
     """
-    return F.pad(tensor, (0, target_length - tensor.shape[-1]), mode=mode, value=value)
+    pass
 
 
 def hz_to_mel(freqs: torch.Tensor):
@@ -35,7 +35,7 @@ def hz_to_mel(freqs: torch.Tensor):
         freqs (torch.Tensor): frequencies to convert.
 
     """
-    return 2595 * torch.log10(1 + freqs / 700)
+    pass
 
 
 def mel_to_hz(mels: torch.Tensor):
@@ -46,7 +46,7 @@ def mel_to_hz(mels: torch.Tensor):
     Args:
         mels (torch.Tensor): mel frequencies to convert.
     """
-    return 700 * (10**(mels / 2595) - 1)
+    pass
 
 
 def mel_frequencies(n_mels: int, fmin: float, fmax: float):
@@ -60,17 +60,14 @@ def mel_frequencies(n_mels: int, fmin: float, fmax: float):
 
 
     """
-    low = hz_to_mel(torch.tensor(float(fmin))).item()
-    high = hz_to_mel(torch.tensor(float(fmax))).item()
-    mels = torch.linspace(low, high, n_mels)
-    return mel_to_hz(mels)
+    pass
 
 
 def volume(x: torch.Tensor, floor=1e-8):
     """
     Return the volume in dBFS.
     """
-    return torch.log10(floor + (x**2).mean(-1)) * 10
+    pass
 
 
 def pure_tone(freq: float, sr: float = 128, dur: float = 4, device=None):
@@ -82,8 +79,7 @@ def pure_tone(freq: float, sr: float = 128, dur: float = 4, device=None):
         sr (float): sample rate (in Hz)
         dur (float): duration (in seconds)
     """
-    time = torch.arange(int(sr * dur), device=device).float() / sr
-    return torch.cos(2 * math.pi * freq * time)
+    pass
 
 
 def unfold(input, kernel_size: int, stride: int):
@@ -109,15 +105,4 @@ def unfold(input, kernel_size: int, stride: int):
     ..Warning:: unlike PyTorch unfold, this will pad the input
         so that any position in `input` is covered by at least one frame.
     """
-    shape = list(input.shape)
-    length = shape.pop(-1)
-    n_frames = math.ceil((max(length, kernel_size) - kernel_size) / stride) + 1
-    tgt_length = (n_frames - 1) * stride + kernel_size
-    padded = F.pad(input, (0, tgt_length - length)).contiguous()
-    strides: tp.List[int] = []
-    for dim in range(padded.dim()):
-        strides.append(padded.stride(dim))
-    last_stride = strides.pop(-1)
-    assert last_stride == 1, 'data should be contiguous'
-    strides = strides + [stride, 1]
-    return padded.as_strided(shape + [n_frames, kernel_size], strides)
+    pass
